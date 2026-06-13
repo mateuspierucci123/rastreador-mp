@@ -20,11 +20,9 @@
 }
 html,body{height:100%}
 body{background:var(--bg);color:var(--t1);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,sans-serif;padding:16px 16px env(safe-area-inset-bottom,24px);max-width:480px;margin:0 auto;font-size:15px;line-height:1.4}
-h1,h2,h3{font-weight:600}
 .card{background:var(--c1);border-radius:14px;border:1px solid var(--br);margin-bottom:10px;overflow:hidden}
 .card-body{padding:14px 16px}
 .row{display:flex;align-items:center;gap:10px}
-.col{display:flex;flex-direction:column;gap:4px}
 .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
 .pill{background:var(--c2);border-radius:8px;padding:6px 4px;text-align:center}
@@ -48,7 +46,6 @@ h1,h2,h3{font-weight:600}
 .adj{padding:8px 10px;border-radius:8px;font-size:11px;display:flex;align-items:flex-start;gap:6px;margin-bottom:10px}
 .adj.neg{background:var(--dg);border:1px solid var(--db);color:var(--dt)}
 .adj.pos{background:var(--sg);border:1px solid var(--sb);color:var(--st)}
-.adj strong{font-weight:600}
 .done-banner{margin-top:12px;padding:10px 14px;background:var(--sg);border-radius:10px;border:1px solid var(--sb);font-size:13px;font-weight:600;color:var(--st);text-align:center}
 button{cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;border-radius:10px;padding:9px 0;width:100%;border:none;transition:opacity .15s}
 button:active{opacity:.75}
@@ -58,20 +55,23 @@ button:active{opacity:.75}
 .btn-reset{background:transparent;color:var(--t3);border:1px solid var(--br)!important;margin-top:6px}
 .edit-area{border-top:1px solid var(--br);padding:14px;background:var(--c2)}
 .edit-lbl{font-size:10px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px}
-.food-row{display:flex;align-items:center;gap:8px;padding-bottom:11px;margin-bottom:11px;border-bottom:1px solid var(--br)}
+.food-row{padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid var(--br)}
 .food-row:last-of-type{border-bottom:none;margin-bottom:0;padding-bottom:0}
-.food-name{font-size:13px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.food-sub{font-size:10px;color:var(--t3);margin-top:2px}
+.food-row-top{display:flex;align-items:center;gap:8px}
+.food-sub{font-size:10px;color:var(--t3);margin-top:5px}
 .food-sub .diff{font-size:10px;margin-left:5px}
 .diff.up{color:var(--dt)}
 .diff.dn{color:var(--st)}
 .qbox{display:flex;align-items:center;gap:5px;flex-shrink:0}
-.qbtn{width:28px;height:28px;border-radius:7px;background:var(--c1);border:1px solid var(--c3)!important;color:var(--t1);font-size:14px;display:flex;align-items:center;justify-content:center;padding:0;width:28px}
+.qbtn{width:28px;height:28px;border-radius:7px;background:var(--c1);border:1px solid var(--c3)!important;color:var(--t1);font-size:14px;display:flex;align-items:center;justify-content:center;padding:0}
 input[type=number]{width:56px;background:var(--c1);border:1px solid var(--c3);border-radius:7px;color:var(--t1);font-size:14px;font-weight:600;text-align:center;padding:6px 4px;font-family:inherit}
 input[type=number]:focus{outline:none;border-color:var(--or)}
 input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+select.food-select{flex:1;min-width:0;background:var(--c1);border:1px solid var(--c3);border-radius:8px;color:var(--t1);font-size:12px;font-weight:500;padding:7px 8px;font-family:inherit;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%23666' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;padding-right:24px}
+select.food-select:focus{outline:none;border-color:var(--or)}
+select.food-select option{background:#1a1a1a;color:#fff}
+.sub-tag{display:inline-block;font-size:9px;font-weight:600;color:var(--or);background:rgba(251,91,57,0.12);border:1px solid rgba(251,91,57,0.25);border-radius:4px;padding:1px 5px;margin-left:4px}
 .actions{display:flex;flex-direction:column;gap:8px;margin-top:14px}
-.sep{color:var(--t3);font-size:10px;text-align:center;text-transform:uppercase;letter-spacing:1px;margin:2px 0}
 .brand{font-size:10px;font-weight:600;color:var(--or);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
 .title-row{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
 .date-info{text-align:right;font-size:12px;color:var(--t2)}
@@ -82,23 +82,63 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 <body>
 <div id="app"></div>
 <script>
-const FOODS={
-  arroz_cozido:{kcal:128,p:2.5,c:28.1,f:0.3},
-  frango_peito:{kcal:159,p:32,c:0,f:3.6},
-  ovo_inteiro:{kcal:146,p:13.3,c:0.6,f:9.5},
-  aveia:{kcal:394,p:13.9,c:66.6,f:8.5},
-  pao_integral:{kcal:253,p:8.7,c:43.7,f:4},
-  banana:{kcal:92,p:1.3,c:23.8,f:0.1},
-  iogurte:{kcal:66,p:3.8,c:5.3,f:3.4},
-  queijo_mussarela:{kcal:300,p:22.3,c:3.6,f:22.1},
-  azeite:{kcal:884,p:0,c:0,f:100},
-  whey:{kcal:380,p:76,c:5,f:5},
-  pasta_amendoim:{kcal:600,p:25,c:20,f:50},
-  legumes:{kcal:25,p:1.5,c:3.5,f:0.3},
-  creatina:{kcal:0,p:0,c:0,f:0}
+// ── BANCO DE ALIMENTOS (valores TACO por 100g) ──────────────────────────────
+const FOODS = {
+  // Proteínas
+  frango_peito:    { kcal:159, p:32.0, c:0,    f:3.6  },
+  carne_bovina:    { kcal:219, p:35.9, c:0,    f:7.3  },
+  carne_suina:     { kcal:195, p:30.0, c:0,    f:7.5  },
+  tilapia:         { kcal:96,  p:20.1, c:0,    f:1.5  },
+  atum_lata:       { kcal:100, p:23.0, c:0,    f:0.5  },
+  ovo_inteiro:     { kcal:146, p:13.3, c:0.6,  f:9.5  },
+  clara_liquida:   { kcal:44,  p:10.0, c:1.0,  f:0    },
+  whey:            { kcal:380, p:76.0, c:5.0,  f:5.0  },
+  iogurte:         { kcal:66,  p:3.8,  c:5.3,  f:3.4  },
+  // Carboidratos
+  arroz_cozido:    { kcal:128, p:2.5,  c:28.1, f:0.3  },
+  macarrao_cozido: { kcal:149, p:4.8,  c:28.6, f:0.8  },
+  batata_doce:     { kcal:86,  p:1.3,  c:20.4, f:0.1  },
+  batata_inglesa:  { kcal:52,  p:1.6,  c:11.3, f:0.1  },
+  feijao_cozido:   { kcal:77,  p:4.8,  c:13.6, f:0.5  },
+  mandioca:        { kcal:125, p:0.6,  c:30.1, f:0.3  },
+  pao_integral:    { kcal:253, p:8.7,  c:43.7, f:4.0  },
+  aveia:           { kcal:394, p:13.9, c:66.6, f:8.5  },
+  banana:          { kcal:92,  p:1.3,  c:23.8, f:0.1  },
+  // Gorduras e laticínios
+  azeite:          { kcal:884, p:0,    c:0,    f:100  },
+  pasta_amendoim:  { kcal:600, p:25.0, c:20.0, f:50.0 },
+  queijo_mussarela:{ kcal:300, p:22.3, c:3.6,  f:22.1 },
+  queijo_prato:    { kcal:360, p:22.0, c:1.5,  f:29.0 },
+  requeijao:       { kcal:240, p:7.0,  c:4.0,  f:22.0 },
+  // Outros
+  legumes:         { kcal:25,  p:1.5,  c:3.5,  f:0.3  },
+  creatina:        { kcal:0,   p:0,    c:0,    f:0    },
 };
-const TARGETS={kcal:3075,p:217,c:339,f:78};
-const MEALS=[
+
+const FOOD_NAMES = {
+  frango_peito:'Frango peito grelhado', carne_bovina:'Carne bovina magra (patinho)',
+  carne_suina:'Carne suína (lombo)', tilapia:'Tilápia grelhada',
+  atum_lata:'Atum em lata (água)', ovo_inteiro:'Ovos inteiros',
+  clara_liquida:'Clara de ovo líquida', whey:'Whey protein', iogurte:'Iogurte natural',
+  arroz_cozido:'Arroz branco cozido', macarrao_cozido:'Macarrão cozido',
+  batata_doce:'Batata doce cozida', batata_inglesa:'Batata inglesa cozida',
+  feijao_cozido:'Feijão carioca cozido', mandioca:'Mandioca cozida',
+  pao_integral:'Pão integral', aveia:'Aveia em flocos', banana:'Banana nanica',
+  azeite:'Azeite de oliva', pasta_amendoim:'Pasta de amendoim',
+  queijo_mussarela:'Queijo mussarela', queijo_prato:'Queijo prato',
+  requeijao:'Requeijão cremoso', legumes:'Legumes variados', creatina:'Creatina',
+};
+
+const FOOD_GROUPS = {
+  'Proteínas':['frango_peito','carne_bovina','carne_suina','tilapia','atum_lata','ovo_inteiro','clara_liquida','whey','iogurte'],
+  'Carboidratos':['arroz_cozido','macarrao_cozido','batata_doce','batata_inglesa','feijao_cozido','mandioca','pao_integral','aveia','banana'],
+  'Gorduras e laticínios':['azeite','pasta_amendoim','queijo_mussarela','queijo_prato','requeijao'],
+  'Outros':['legumes','creatina'],
+};
+
+const TARGETS = { kcal:3075, p:217, c:339, f:78 };
+
+const MEALS = [
   {id:'pos_treino',name:'Pós-treino',time:'Encaixe no dia',icon:'⚡',
    items:[{food:'banana',amount:100,label:'Banana nanica'},{food:'whey',amount:30,label:'Whey protein'}]},
   {id:'cafe',name:'Café da manhã',time:'09:00',icon:'☕',
@@ -109,37 +149,39 @@ const MEALS=[
      {food:'queijo_mussarela',amount:20,label:'Queijo mussarela'},
      {food:'banana',amount:100,label:'Banana nanica'},
      {food:'pasta_amendoim',amount:30,label:'Pasta de amendoim'},
-     {food:'creatina',amount:5,label:'Creatina'}
+     {food:'creatina',amount:5,label:'Creatina'},
    ]},
   {id:'almoco',name:'Almoço',time:'12:30',icon:'🍗',
    items:[
      {food:'arroz_cozido',amount:240,label:'Arroz cozido'},
      {food:'frango_peito',amount:170,label:'Frango peito grelhado'},
      {food:'legumes',amount:200,label:'Legumes variados'},
-     {food:'azeite',amount:5,label:'Azeite de oliva'}
+     {food:'azeite',amount:5,label:'Azeite de oliva'},
    ]},
   {id:'lanche',name:'Lanche da tarde',time:'16:00',icon:'🥤',
    items:[
      {food:'iogurte',amount:170,label:'Iogurte natural'},
      {food:'whey',amount:30,label:'Whey protein'},
      {food:'aveia',amount:60,label:'Aveia em flocos'},
-     {food:'banana',amount:100,label:'Banana nanica'}
+     {food:'banana',amount:100,label:'Banana nanica'},
    ]},
   {id:'jantar',name:'Jantar',time:'20:00',icon:'🌙',
    items:[
      {food:'arroz_cozido',amount:240,label:'Arroz cozido'},
      {food:'frango_peito',amount:170,label:'Frango peito grelhado'},
      {food:'legumes',amount:200,label:'Legumes variados'},
-     {food:'azeite',amount:5,label:'Azeite de oliva'}
-   ]}
+     {food:'azeite',amount:5,label:'Azeite de oliva'},
+   ]},
 ];
 
-let logs={},expanded=null,editAmounts={};
+// ── ESTADO ──────────────────────────────────────────────────────────────────
+let logs={}, expanded=null, editAmounts={}, editFoods={};
 
-function getKey(){return'plano_mp_'+new Date().toISOString().split('T')[0]}
+function getKey(){return 'plano_mp_'+new Date().toISOString().split('T')[0]}
 function save(){try{localStorage.setItem(getKey(),JSON.stringify(logs))}catch(e){}}
 function load(){try{const d=localStorage.getItem(getKey());if(d)logs=JSON.parse(d)}catch(e){}}
 
+// ── CÁLCULOS ─────────────────────────────────────────────────────────────────
 function calcMacros(items){
   return items.reduce((a,i)=>{
     const f=FOODS[i.food];if(!f||i.amount<=0)return a;
@@ -147,7 +189,6 @@ function calcMacros(items){
     return{kcal:a.kcal+f.kcal*x,p:a.p+f.p*x,c:a.c+f.c*x,f:a.f+f.f*x};
   },{kcal:0,p:0,c:0,f:0});
 }
-
 const PLANNED=MEALS.reduce((a,m)=>{a[m.id]=calcMacros(m.items);return a},{});
 
 function getConsumed(){
@@ -157,9 +198,18 @@ function getConsumed(){
     return{kcal:a.kcal+m.kcal,p:a.p+m.p,c:a.c+m.c,f:a.f+m.f};
   },{kcal:0,p:0,c:0,f:0});
 }
-
 function r(n){return Math.round(n)}
 
+// ── SELECT HTML ──────────────────────────────────────────────────────────────
+function buildSelect(key, currentFoodId){
+  const opts = Object.entries(FOOD_GROUPS).map(([group,ids])=>`
+    <optgroup label="${group}">
+      ${ids.map(id=>`<option value="${id}"${id===currentFoodId?' selected':''}>${FOOD_NAMES[id]||id}</option>`).join('')}
+    </optgroup>`).join('');
+  return `<select class="food-select" onchange="setFood('${key}',this.value)">${opts}</select>`;
+}
+
+// ── RENDER ───────────────────────────────────────────────────────────────────
 function renderApp(){
   const consumed=getConsumed();
   const rem={kcal:TARGETS.kcal-consumed.kcal,p:TARGETS.p-consumed.p,c:TARGETS.c-consumed.c,f:TARGETS.f-consumed.f};
@@ -169,180 +219,145 @@ function renderApp(){
   const delta={kcal:rem.kcal-planP.kcal,p:rem.p-planP.p,c:rem.c-planP.c,f:rem.f-planP.f};
   const perD=nP>0?{kcal:delta.kcal/nP,p:delta.p/nP,c:delta.c/nP,f:delta.f/nP}:null;
   const allDone=Object.keys(logs).length===MEALS.length;
-
   const dt=new Date().toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'});
 
-  const bars=[
-    {label:'Calorias',val:consumed.kcal,target:TARGETS.kcal,unit:''},
-    {label:'Proteína',val:consumed.p,target:TARGETS.p,unit:'g'},
-    {label:'Carboidrato',val:consumed.c,target:TARGETS.c,unit:'g'},
-    {label:'Gordura',val:consumed.f,target:TARGETS.f,unit:'g'},
-  ];
-
-  let html=`
-  <div class="card">
-    <div class="card-body">
-      <div class="title-row">
-        <div>
-          <div class="brand">Resistência Magra</div>
-          <div class="main-title">Rastreador diário</div>
-        </div>
-        <div class="date-info">
-          ${dt}
-          <div class="date-sub">↺ zera à meia-noite</div>
-        </div>
-      </div>
-      ${bars.map(({label,val,target,unit})=>{
-        const pct=Math.min(100,(val/target)*100);
-        const over=val>target*1.05;
-        return`<div class="bar-row">
-          <div class="bar-labels${over?' over':''}">
-            <span>${label}</span>
-            <span>${r(val)}${unit} / ${target}${unit}</span>
-          </div>
-          <div class="bar-wrap"><div class="bar-fill${over?' over':''}" style="width:${pct}%"></div></div>
-        </div>`;
-      }).join('')}
-      <div class="grid2" style="margin-top:14px">
-        ${[
-          {label:'kcal restante',val:r(rem.kcal),u:''},
-          {label:'prot restante',val:r(rem.p),u:'g'},
-          {label:'carb restante',val:r(rem.c),u:'g'},
-          {label:'gord restante',val:r(rem.f),u:'g'},
-        ].map(({label,val,u})=>`
-          <div class="stat">
-            <div class="stat-val" style="${val<-10?'color:var(--dt)':''}">${val}${u}</div>
-            <div class="stat-lbl">${label}</div>
-          </div>
-        `).join('')}
-      </div>
-      ${allDone?`<div class="done-banner">🏆 Dia completo registrado!</div>`:''}
+  let html=`<div class="card"><div class="card-body">
+    <div class="title-row">
+      <div><div class="brand">Resistência Magra</div><div class="main-title">Rastreador diário</div></div>
+      <div class="date-info">${dt}<div class="date-sub">↺ zera à meia-noite</div></div>
     </div>
-  </div>`;
+    ${[{label:'Calorias',val:consumed.kcal,target:TARGETS.kcal,unit:''},
+       {label:'Proteína',val:consumed.p,target:TARGETS.p,unit:'g'},
+       {label:'Carboidrato',val:consumed.c,target:TARGETS.c,unit:'g'},
+       {label:'Gordura',val:consumed.f,target:TARGETS.f,unit:'g'}
+    ].map(({label,val,target,unit})=>{
+      const pct=Math.min(100,(val/target)*100),over=val>target*1.05;
+      return`<div class="bar-row">
+        <div class="bar-labels${over?' over':''}"><span>${label}</span><span>${r(val)}${unit} / ${target}${unit}</span></div>
+        <div class="bar-wrap"><div class="bar-fill${over?' over':''}" style="width:${pct}%"></div></div>
+      </div>`;
+    }).join('')}
+    <div class="grid2" style="margin-top:14px">
+      ${[{label:'kcal restante',val:r(rem.kcal),u:''},{label:'prot restante',val:r(rem.p),u:'g'},
+         {label:'carb restante',val:r(rem.c),u:'g'},{label:'gord restante',val:r(rem.f),u:'g'}
+      ].map(({label,val,u})=>`
+        <div class="stat"><div class="stat-val"${val<-10?' style="color:var(--dt)"':''}>${val}${u}</div><div class="stat-lbl">${label}</div></div>
+      `).join('')}
+    </div>
+    ${allDone?'<div class="done-banner">🏆 Dia completo registrado!</div>':''}
+  </div></div>`;
 
   MEALS.forEach(meal=>{
     const log=logs[meal.id];
-    const isLogged=!!log&&!log.skipped;
-    const isSkipped=log?.skipped;
-    const isPending=!log;
-    const isOpen=expanded===meal.id;
+    const isLogged=!!log&&!log.skipped, isSkipped=log?.skipped, isPending=!log, isOpen=expanded===meal.id;
     const pm=PLANNED[meal.id];
     const am=isLogged?calcMacros(log.items):null;
-
     const adjKcal=isPending&&perD?r(perD.kcal):0;
     const adjC=isPending&&perD?r(perD.c):0;
     const adjP=isPending&&perD?r(perD.p):0;
     const hasAdj=isPending&&perD&&(Math.abs(adjKcal)>20||Math.abs(adjP)>3||Math.abs(adjC)>5);
-
     const borderColor=isLogged?'var(--sb)':isSkipped?'var(--wb)':'var(--br)';
 
     html+=`<div class="card" style="border-color:${borderColor}">
       <div class="card-body">
         <div class="row" style="margin-bottom:10px">
           <div class="icon-wrap${isLogged?' done':''}">${meal.icon}</div>
-          <div class="col" style="flex:1">
-            <span style="font-size:14px;font-weight:600">${meal.name}</span>
-            <span style="font-size:11px;color:var(--t3)">${meal.time}</span>
-          </div>
-          ${isLogged?`<span class="badge badge-ok">✓ ok</span>`:''}
-          ${isSkipped?`<span class="badge badge-skip">pulado</span>`:''}
+          <div style="flex:1"><div style="font-size:14px;font-weight:600">${meal.name}</div><div style="font-size:11px;color:var(--t3)">${meal.time}</div></div>
+          ${isLogged?'<span class="badge badge-ok">✓ ok</span>':''}
+          ${isSkipped?'<span class="badge badge-skip">pulado</span>':''}
         </div>
-
         <div class="grid4" style="margin-bottom:${hasAdj?10:0}px">
-          ${[
-            {lbl:'kcal',pv:pm.kcal,av:am?.kcal},
-            {lbl:'prot',pv:pm.p,av:am?.p},
-            {lbl:'carb',pv:pm.c,av:am?.c},
-            {lbl:'gord',pv:pm.f,av:am?.f},
+          ${[{lbl:'kcal',pv:pm.kcal,av:am?.kcal},{lbl:'prot',pv:pm.p,av:am?.p},
+             {lbl:'carb',pv:pm.c,av:am?.c},{lbl:'gord',pv:pm.f,av:am?.f}
           ].map(({lbl,pv,av})=>{
-            const shown=av??pv;
-            const diff=av!==undefined?av-pv:null;
+            const shown=av??pv, diff=av!==undefined?av-pv:null;
             const over=diff!==null&&Math.abs(diff)>5;
-            const diffColor=over?(diff>0?'var(--dt)':'var(--st)'):'';
+            const dc=over?(diff>0?'var(--dt)':'var(--st)'):'';
             const unit=lbl==='kcal'?'':'g';
             return`<div class="pill">
-              <div class="pill-val" style="${diffColor?'color:'+diffColor:''}">${r(shown)}${unit}</div>
+              <div class="pill-val"${dc?` style="color:${dc}"`:''}>${r(shown)}${unit}</div>
               <div class="pill-lbl">${lbl}</div>
-              ${over?`<div class="pill-diff" style="color:${diffColor}">${diff>0?'+':''}${r(diff)}${unit}</div>`:''}
+              ${over?`<div class="pill-diff" style="color:${dc}">${diff>0?'+':''}${r(diff)}${unit}</div>`:''}
             </div>`;
           }).join('')}
         </div>
-
         ${hasAdj?`<div class="adj ${adjKcal<0?'neg':'pos'}">
           <span>${adjKcal<0?'↓':'↑'}</span>
           <span>Ajuste: <strong>${adjKcal>0?'+':''}${adjKcal} kcal · ${adjP>0?'+':''}${adjP}g prot · ${adjC>0?'+':''}${adjC}g carb</strong></span>
         </div>`:''}
-
-        ${isPending?`
-          <button class="${isOpen?'btn-sec':'btn-main'}" onclick="toggleExpand('${meal.id}')">
-            ${isOpen?'✕ Fechar':'✏️ Registrar refeição'}
-          </button>
-        `:`
-          <button class="btn-sec" onclick="unlog('${meal.id}')">↩ Desfazer registro</button>
-        `}
+        ${isPending
+          ?`<button class="${isOpen?'btn-sec':'btn-main'}" onclick="toggleExpand('${meal.id}')">${isOpen?'✕ Fechar':'✏️ Registrar refeição'}</button>`
+          :`<button class="btn-sec" onclick="unlog('${meal.id}')">↩ Desfazer registro</button>`
+        }
       </div>
 
       ${isOpen&&isPending?`
         <div class="edit-area">
-          <div class="edit-lbl">Ajuste se comeu diferente do plano</div>
+          <div class="edit-lbl">O que você comeu de verdade</div>
           ${meal.items.map(item=>{
             const key=item.food+item.label;
+            const activeFoodId=editFoods[key]||item.food;
             const cur=parseFloat(editAmounts[key]??item.amount)||0;
-            const fd=FOODS[item.food];
-            const kcalDiff=fd?r(((cur-item.amount)/100)*fd.kcal):0;
+            const fd=FOODS[activeFoodId];
+            const plannedFd=FOODS[item.food];
+            const actualKcal=fd?r((cur/100)*fd.kcal):0;
+            const plannedKcal=plannedFd?r((item.amount/100)*plannedFd.kcal):0;
+            const kcalDiff=actualKcal-plannedKcal;
             const diffClass=kcalDiff>0?'up':'dn';
+            const isSub=activeFoodId!==item.food;
             return`<div class="food-row">
-              <div style="flex:1;min-width:0">
-                <div class="food-name">${item.label}</div>
-                <div class="food-sub">
-                  Plano: ${item.amount}g
-                  ${cur!==item.amount&&cur>0?`<span class="diff ${diffClass}">${kcalDiff>0?'+':''}${kcalDiff} kcal</span>`:''}
+              <div class="food-row-top">
+                ${buildSelect(key, activeFoodId)}
+                <div class="qbox">
+                  <button class="qbtn" onclick="adjAmt('${key}',-10)">−</button>
+                  <input type="number" value="${cur}" min="0" step="5" onchange="setAmt('${key}',this.value)" oninput="setAmt('${key}',this.value)">
+                  <button class="qbtn" onclick="adjAmt('${key}',10)">+</button>
                 </div>
               </div>
-              <div class="qbox">
-                <button class="qbtn" onclick="adj('${key}','${item.food}','${item.label}',-10)">−</button>
-                <input type="number" id="inp_${key}" value="${cur}" min="0" step="5" onchange="setAmt('${key}',this.value)" oninput="setAmt('${key}',this.value)">
-                <button class="qbtn" onclick="adj('${key}','${item.food}','${item.label}',10)">+</button>
+              <div class="food-sub">
+                Plano: ${item.label} (${item.amount}g)
+                ${isSub?'<span class="sub-tag">SUBSTITUTO</span>':''}
+                ${kcalDiff!==0?`<span class="diff ${diffClass}">${kcalDiff>0?'+':''}${kcalDiff} kcal</span>`:''}
               </div>
             </div>`;
           }).join('')}
           <div class="actions">
             <button class="btn-sec" onclick="logPlanned('${meal.id}')">✓ Comi exatamente como planejado</button>
-            <button class="btn-main" onclick="logCustom('${meal.id}')">💾 Confirmar quantidades acima</button>
+            <button class="btn-main" onclick="logCustom('${meal.id}')">💾 Confirmar o que comi acima</button>
             <button class="btn-link" onclick="skip('${meal.id}')">Pular esta refeição</button>
           </div>
-        </div>
-      `:''}
+        </div>`:''}
     </div>`;
   });
 
-  html+=`<div style="text-align:center">
-    <button class="btn-reset" style="width:auto;padding:8px 24px;font-size:12px" onclick="resetDay()">↺ Resetar dia</button>
-  </div>`;
-
+  html+=`<div style="text-align:center"><button class="btn-reset" style="width:auto;padding:8px 24px;font-size:12px" onclick="resetDay()">↺ Resetar dia</button></div>`;
   document.getElementById('app').innerHTML=html;
 }
 
+// ── AÇÕES ────────────────────────────────────────────────────────────────────
 function toggleExpand(id){
   if(expanded===id){expanded=null}
   else{
     const meal=MEALS.find(m=>m.id===id);
-    editAmounts={};
-    meal.items.forEach(i=>{editAmounts[i.food+i.label]=i.amount});
+    editAmounts={};editFoods={};
+    meal.items.forEach(i=>{editAmounts[i.food+i.label]=i.amount;editFoods[i.food+i.label]=i.food});
     expanded=id;
   }
   renderApp();
 }
 
-function adj(key,food,label,delta){
+function setFood(key,foodId){
+  editFoods[key]=foodId;
+  renderApp();
+}
+
+function adjAmt(key,delta){
   const cur=parseFloat(editAmounts[key]??0);
   editAmounts[key]=Math.max(0,cur+delta);
   renderApp();
 }
 
-function setAmt(key,val){
-  editAmounts[key]=parseFloat(val)||0;
-}
+function setAmt(key,val){editAmounts[key]=parseFloat(val)||0}
 
 function logPlanned(id){
   const meal=MEALS.find(m=>m.id===id);
@@ -352,15 +367,15 @@ function logPlanned(id){
 
 function logCustom(id){
   const meal=MEALS.find(m=>m.id===id);
-  const items=meal.items.map(i=>({...i,amount:parseFloat(editAmounts[i.food+i.label])||0}));
+  const items=meal.items.map(i=>{
+    const key=i.food+i.label;
+    return{...i,food:editFoods[key]||i.food,amount:parseFloat(editAmounts[key])||0};
+  });
   logs[id]={items,skipped:false};
   expanded=null;save();renderApp();
 }
 
-function skip(id){
-  logs[id]={items:[],skipped:true};
-  expanded=null;save();renderApp();
-}
+function skip(id){logs[id]={items:[],skipped:true};expanded=null;save();renderApp()}
 
 function unlog(id){
   delete logs[id];
@@ -370,17 +385,15 @@ function unlog(id){
 
 function resetDay(){
   if(confirm('Resetar todos os registros do dia?')){
-    logs={};expanded=null;editAmounts={};
+    logs={};expanded=null;editAmounts={};editFoods={};
     save();renderApp();
   }
 }
 
+// ── INIT ─────────────────────────────────────────────────────────────────────
 load();
 renderApp();
-
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js').catch(()=>{});
-}
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>
 </html>
