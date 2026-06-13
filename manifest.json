@@ -1,0 +1,23 @@
+{
+  "name": "Rastreador Resistência Magra",
+  "short_name": "Plano MP",
+  "description": "Rastreador nutricional diário de Mateus Pierucci",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0f0f0f",
+  "theme_color": "#FB5B39",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://placehold.co/192x192/FB5B39/FFFFFF/png?text=MP",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://placehold.co/512x512/FB5B39/FFFFFF/png?text=MP",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
